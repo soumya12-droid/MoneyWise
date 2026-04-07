@@ -24,6 +24,7 @@ function Navbar() {
         role="banner"
         onClick={() => navigate('/dashboard')}
       >
+        <img src="/moneywise-logo.png" alt="MoneyWise logo" className="brand-logo" />
         MoneyWise
       </button>
 

@@ -9,6 +9,25 @@ const formatINR = (value) =>
     maximumFractionDigits: 0,
   }).format(value)
 
+function getCanvasThemeColors() {
+  const isDark = document.documentElement.dataset.theme === 'dark'
+  if (isDark) {
+    return {
+      title: '#f5f4ff',
+      text: '#e8f8fc',
+      muted: '#d8d3f2',
+      axis: 'rgba(196, 181, 253, 0.45)',
+    }
+  }
+
+  return {
+    title: '#111827',
+    text: '#374151',
+    muted: '#4b5563',
+    axis: '#e5e7eb',
+  }
+}
+
 function normalizeCanvas(canvas, width = 520, height = 300) {
   const dpr = window.devicePixelRatio || 1
   canvas.width = Math.floor(width * dpr)
@@ -21,10 +40,12 @@ function normalizeCanvas(canvas, width = 520, height = 300) {
 }
 
 function drawEmptyState(ctx, title, width, height) {
+  const colors = getCanvasThemeColors()
   ctx.clearRect(0, 0, width, height)
-  ctx.fillStyle = '#6b7280'
+  ctx.fillStyle = colors.title
   ctx.font = '600 16px Inter, Segoe UI, Arial'
   ctx.fillText(title, 20, 34)
+  ctx.fillStyle = colors.muted
   ctx.font = '500 14px Inter, Segoe UI, Arial'
   ctx.fillText('No expense data available', 20, 62)
 }
@@ -66,6 +87,7 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
 
   useEffect(() => {
     if (!pieRef.current) return
+    const colors = getCanvasThemeColors()
     const w = getCanvasWidth(pieRef.current, compact)
     const h = 300
     const ctx = normalizeCanvas(pieRef.current, w, h)
@@ -99,20 +121,21 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
         const legendX = hasSideLegend ? 286 : 20
         ctx.fillStyle = COLORS[idx % COLORS.length]
         ctx.fillRect(legendX, legendY - 11, 12, 12)
-        ctx.fillStyle = '#374151'
+        ctx.fillStyle = colors.text
         ctx.font = '600 12px Inter, Segoe UI, Arial'
         const shortCategory = category.length > (hasSideLegend ? 12 : 18) ? `${category.slice(0, hasSideLegend ? 12 : 18)}...` : category
         ctx.fillText(`${shortCategory}: ${formatINR(value)}`, legendX + 18, legendY)
       }
     })
 
-    ctx.fillStyle = '#111827'
+    ctx.fillStyle = colors.title
     ctx.font = '700 16px Inter, Segoe UI, Arial'
     ctx.fillText('Category-wise Expenses (Pie)', 18, 28)
   }, [categoryData, compact])
 
   useEffect(() => {
     if (!barRef.current) return
+    const colors = getCanvasThemeColors()
     const width = getCanvasWidth(barRef.current, compact)
     const ctx = normalizeCanvas(barRef.current, width, 300)
     ctx.clearRect(0, 0, width, 300)
@@ -130,11 +153,11 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
     const barGap = 14
     const barWidth = (chartW - barGap * (monthData.length + 1)) / monthData.length
 
-    ctx.fillStyle = '#111827'
+    ctx.fillStyle = colors.title
     ctx.font = '700 16px Inter, Segoe UI, Arial'
     ctx.fillText('Monthly Expenses (Bar)', 18, 28)
 
-    ctx.strokeStyle = '#e5e7eb'
+    ctx.strokeStyle = colors.axis
     ctx.beginPath()
     ctx.moveTo(chartX, chartY)
     ctx.lineTo(chartX, chartY + chartH)
@@ -148,7 +171,7 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
       ctx.fillStyle = COLORS[i % COLORS.length]
       ctx.fillRect(x, y, barWidth, h)
 
-      ctx.fillStyle = '#4b5563'
+      ctx.fillStyle = colors.muted
       ctx.font = '600 11px Inter, Segoe UI, Arial'
       const [yy, mm] = key.split('-')
       ctx.fillText(`${mm}/${yy.slice(2)}`, x, chartY + chartH + 14)
