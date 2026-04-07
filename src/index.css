@@ -1,17 +1,17 @@
 /* Theme tokens (default: light) */
 :root {
-  --bg: #eef7fb;
-  --page-bg: #f7fcff;
-  --text: #111827;
-  --muted: #6b7280;
-  --border: #cfe5ef;
+  --bg: #caf0f8;
+  --page-bg: #f4fcff;
+  --text: #03045e;
+  --muted: #144a78;
+  --border: #90e0ef;
   --shadow: 0 14px 28px rgba(15, 23, 42, 0.07);
-  --brand: #457b9d;
-  --brand-hover: #3a6886;
-  --brand-soft: rgba(69, 123, 157, 0.14);
-  --accent: #a8dadc;
+  --brand: #0077b6;
+  --brand-hover: #00b4d8;
+  --brand-soft: rgba(144, 224, 239, 0.25);
+  --accent: #90e0ef;
   --danger: #ef4444;
-  --focus-ring: rgba(69, 123, 157, 0.34);
+  --focus-ring: rgba(0, 119, 182, 0.35);
 
   font-family: 'Inter', 'Segoe UI', Roboto, Arial, sans-serif;
   color: var(--text);
@@ -43,30 +43,17 @@ html[data-theme='dark'] {
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(1200px 600px at 20% 0%, rgba(69, 123, 157, 0.22), transparent 60%),
-    radial-gradient(900px 500px at 90% 10%, rgba(168, 218, 220, 0.28), transparent 55%),
-    linear-gradient(135deg, rgba(232, 245, 250, 0.92) 0%, rgba(245, 252, 255, 0.98) 100%);
+  background: radial-gradient(1200px 600px at 20% 0%, rgba(0, 119, 182, 0.2), transparent 60%),
+    radial-gradient(900px 500px at 90% 10%, rgba(0, 180, 216, 0.2), transparent 55%),
+    linear-gradient(135deg, rgba(202, 240, 248, 0.96) 0%, rgba(244, 252, 255, 0.98) 100%);
 }
 
 html[data-theme='dark'] body {
   background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(167, 139, 250, 0.035) 0px,
-      rgba(167, 139, 250, 0.035) 1px,
-      transparent 1px,
-      transparent 38px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(167, 139, 250, 0.02) 0px,
-      rgba(167, 139, 250, 0.02) 1px,
-      transparent 1px,
-      transparent 38px
-    ),
-    radial-gradient(1100px 540px at 25% 0%, rgba(139, 92, 246, 0.28), transparent 60%),
-    radial-gradient(900px 450px at 90% 10%, rgba(76, 29, 149, 0.24), transparent 58%),
-    linear-gradient(140deg, #0a0a14 0%, #0f1022 62%, #0c0d18 100%);
+    radial-gradient(900px 520px at 8% 10%, rgba(255, 235, 205, 0.5), transparent 55%),
+    radial-gradient(1000px 620px at 42% 8%, rgba(167, 139, 250, 0.44), transparent 62%),
+    radial-gradient(1000px 620px at 72% 35%, rgba(124, 58, 237, 0.28), transparent 66%),
+    linear-gradient(125deg, #14152b 12%, #2b2d63 45%, #151832 72%, #0b0d1b 100%);
 }
 
 #root {
@@ -84,6 +71,13 @@ p {
   display: grid;
   place-items: center;
   padding: 1.25rem;
+  position: relative;
+}
+
+.auth-theme-toggle {
+  position: absolute;
+  top: 1.15rem;
+  right: 1.15rem;
 }
 
 .auth-card,
@@ -99,6 +93,23 @@ p {
 .auth-card h1,
 .dashboard-card h1 {
   margin-bottom: 0.5rem;
+}
+
+.login-brand-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.login-brand-row h1 {
+  margin: 0;
+}
+
+.login-brand-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .auth-card p,

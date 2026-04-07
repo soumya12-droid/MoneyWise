@@ -65,9 +65,7 @@ function Predict() {
   return (
     <section className="page-card">
       <h1>Predict Expense</h1>
-      <p className="muted-text">
-        Prediction uses simple averages from your past expenses (no ML): average = sum / count.
-      </p>
+    
 
       {expenseTransactions.length === 0 ? (
         <div className="empty-state">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 const COLORS = ['#4f46e5', '#0ea5e9', '#16a34a', '#f59e0b', '#ef4444', '#8b5cf6', '#14b8a6', '#ec4899']
 
@@ -9,8 +9,8 @@ const formatINR = (value) =>
     maximumFractionDigits: 0,
   }).format(value)
 
-function getCanvasThemeColors() {
-  const isDark = document.documentElement.dataset.theme === 'dark'
+function getCanvasThemeColors(theme) {
+  const isDark = theme === 'dark'
   if (isDark) {
     return {
       title: '#f5f4ff',
@@ -59,6 +59,16 @@ function getCanvasWidth(canvas, compact) {
 function ExpenseChartsCanvas({ transactions, compact = false }) {
   const pieRef = useRef(null)
   const barRef = useRef(null)
+  const [theme, setTheme] = useState(document.documentElement.dataset.theme || 'light')
+
+  useEffect(() => {
+    const root = document.documentElement
+    const observer = new MutationObserver(() => {
+      setTheme(root.dataset.theme || 'light')
+    })
+    observer.observe(root, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => observer.disconnect()
+  }, [])
 
   const expenseTransactions = useMemo(
     () => transactions.filter((t) => t.type === 'expense' && Number(t.amount || 0) > 0),
@@ -87,7 +97,7 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
 
   useEffect(() => {
     if (!pieRef.current) return
-    const colors = getCanvasThemeColors()
+    const colors = getCanvasThemeColors(theme)
     const w = getCanvasWidth(pieRef.current, compact)
     const h = 300
     const ctx = normalizeCanvas(pieRef.current, w, h)
@@ -131,11 +141,11 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
     ctx.fillStyle = colors.title
     ctx.font = '700 16px Inter, Segoe UI, Arial'
     ctx.fillText('Category-wise Expenses (Pie)', 18, 28)
-  }, [categoryData, compact])
+  }, [categoryData, compact, theme])
 
   useEffect(() => {
     if (!barRef.current) return
-    const colors = getCanvasThemeColors()
+    const colors = getCanvasThemeColors(theme)
     const width = getCanvasWidth(barRef.current, compact)
     const ctx = normalizeCanvas(barRef.current, width, 300)
     ctx.clearRect(0, 0, width, 300)
@@ -176,7 +186,7 @@ function ExpenseChartsCanvas({ transactions, compact = false }) {
       const [yy, mm] = key.split('-')
       ctx.fillText(`${mm}/${yy.slice(2)}`, x, chartY + chartH + 14)
     })
-  }, [monthData, compact])
+  }, [monthData, compact, theme])
 
   return (
     <div className={`charts-grid ${compact ? 'charts-grid-compact' : ''}`}>

@@ -95,7 +95,6 @@ function AddExpense() {
   return (
     <section className="page-card">
       <h1>Add Transactions</h1>
-      <p className="muted-text">Add a transaction and it will be saved to localStorage.</p>
 
       <form onSubmit={handleSubmit} className="form-grid" aria-label="Add transaction form">
         <div className="field">
@@ -158,7 +157,7 @@ function AddExpense() {
             name="notes"
             value={form.notes}
             onChange={handleChange}
-            placeholder="Optional details (e.g., invoice number, why it happened)"
+            placeholder="Optional details"
           />
         </div>
 

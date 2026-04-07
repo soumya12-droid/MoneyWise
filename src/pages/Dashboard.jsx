@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { loadMonthlyBudget, loadTransactions } from '../utils/moneywiseStorage'
+import { loadRegisteredUser, loadSessionUser } from '../utils/userStorage'
 
 const formatINR = (value) => {
   const n = Number(value)
@@ -126,10 +127,15 @@ function Dashboard() {
         ? "You're doing okay, keep an eye on spending 👀"
         : 'Great job! Your spending is well within budget 💰'
 
+  const userName = useMemo(() => {
+    const sessionUser = loadSessionUser()
+    const registeredUser = loadRegisteredUser()
+    return sessionUser?.name || registeredUser?.name || 'User'
+  }, [])
+
   return (
     <section className="page-card">
-      <h1>Dashboard</h1>
-      <p className="muted-text">Your high-level snapshot of MoneyWise.</p>
+      <h1>Welcome, {userName}</h1>
 
       <SummaryCards totals={totals} />
 

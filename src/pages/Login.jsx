@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../utils/auth'
+import { loadTheme, login, saveTheme } from '../utils/auth'
 import {
   loadRegisteredUser,
   saveRegisteredUser,
@@ -66,10 +66,33 @@ function Login() {
     navigate('/dashboard', { replace: true })
   }
 
+  const handleThemeToggle = () => {
+    const next = loadTheme() === 'dark' ? 'light' : 'dark'
+    saveTheme(next)
+    document.documentElement.dataset.theme = next
+  }
+
   return (
     <main className="auth-page">
+      <button
+        type="button"
+        className="icon-btn auth-theme-toggle"
+        onClick={handleThemeToggle}
+        aria-label="Toggle theme"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 18.5A6.5 6.5 0 1 1 18.5 12 6.5 6.5 0 0 1 12 18.5Zm0-11A4.5 4.5 0 1 0 16.5 12 4.5 4.5 0 0 0 12 7.5Zm0-5.25a1 1 0 0 1 1 1V4a1 1 0 0 1-2 0V3.25a1 1 0 0 1 1-1Zm0 18a1 1 0 0 1 1 1V22a1 1 0 0 1-2 0v-.75a1 1 0 0 1 1-1ZM2.25 12a1 1 0 0 1 1-1H4a1 1 0 0 1 0 2h-.75a1 1 0 0 1-1-1Zm18 0a1 1 0 0 1 1-1H22a1 1 0 0 1 0 2h-.75a1 1 0 0 1-1-1ZM4.4 4.4a1 1 0 0 1 1.41 0l.53.53a1 1 0 1 1-1.41 1.41l-.53-.53a1 1 0 0 1 0-1.41Zm13.26 13.26a1 1 0 0 1 1.41 0l.53.53a1 1 0 1 1-1.41 1.41l-.53-.53a1 1 0 0 1 0-1.41ZM19.6 4.4a1 1 0 0 1 0 1.41l-.53.53a1 1 0 0 1-1.41-1.41l.53-.53a1 1 0 0 1 1.41 0ZM6.34 17.66a1 1 0 0 1 0 1.41l-.53.53a1 1 0 0 1-1.41-1.41l.53-.53a1 1 0 0 1 1.41 0Z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+
       <section className="auth-card">
-        <h1>MoneyWise</h1>
+        <div className="login-brand-row">
+          <img src="/moneywise-logo.png" alt="MoneyWise logo" className="login-brand-logo" />
+          <h1>MoneyWise</h1>
+        </div>
         <p>{mode === 'login' ? 'Log in to continue.' : 'Create an account to continue.'}</p>
 
         <div className="auth-tabs" role="tablist" aria-label="Authentication mode">
